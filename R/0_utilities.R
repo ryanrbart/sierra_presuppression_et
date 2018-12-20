@@ -11,7 +11,9 @@ library(dplyr)
 library(purrr)
 library(lubridate)
 library(broom)
-
+library(raster)
+library(rgdal)
+library(sf)
 
 
 # ---------------------------------------------------------------------
