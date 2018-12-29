@@ -93,13 +93,12 @@ x <- ggplot() +
   scale_fill_continuous(low="red", high="blue", name="Reduction in\nET (mm)") +
   #scale_x_continuous(expand=c(0,0)) +   # This eliminates margin buffer around plot
   #scale_y_continuous(expand=c(0,0)) +   # This eliminates margin buffer around plot
-  labs(title=paste("Reduction in historical ET relative to present day in Kings River Watershed"), x="Longitude",y="Latitude", size=0.5) +
-  theme_classic(base_size =12) +
+  labs(title=paste("Reduction in Historical ET Relative to Modern-Day ET"), x="Longitude",y="Latitude", size=0.5) +
+  theme_classic(base_size =14) +
   theme (panel.grid.major = element_line(size = 0.5, linetype = 'solid', colour = "grey"))  +
   NULL
 plot(x)
-
-ggsave(paste("output/output_1/map_historical_ET_diff.jpg",sep=""),plot=x, width = 8, height = 7.8)
+ggsave(paste("output/output_1/map_historical_ET_diff.jpg",sep=""),plot=x, width = 8, height = 5)
 
 
 
