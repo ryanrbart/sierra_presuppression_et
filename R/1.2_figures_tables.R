@@ -162,7 +162,19 @@ summary_all <- db_final_all %>%
 
 
 # ---------------------------------------------------------------------
-# Map of ET changes for Kings watershed
+# Calculate mean full natural flow
+
+q_annual <- q %>% 
+  dplyr::mutate(flow_mm = flow_af/3998*1.233) %>% 
+  dplyr::group_by(wy) %>% 
+  dplyr::summarise(flow_mm = sum(flow_mm))
+
+
+# Average streamflow from 2001 to 2016
+q_annual %>% 
+  dplyr::filter(wy>2000, wy<2017) %>% 
+  dplyr::summarise(mean_flow = mean(flow_mm))
+
 
 
 

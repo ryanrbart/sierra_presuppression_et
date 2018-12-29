@@ -23,8 +23,8 @@ source("R/0_utilities.R")
 # Estimate the relationship between LAI and NDVI from Gamon et al. 1995
 
 # Estimate of line values from Figure 4b and Figure 2d
-x <- c(-3.5, -2, -1, 0, 1, 2)
-y <- c(0.2, 0.35, 0.44, 0.55, 0.67, 0.78)
+x <- c(-3, -2, -1, 0, 1, 2)
+y <- c(0.25, 0.35, 0.45, 0.55, 0.65, 0.75)
 
 happy <- broom::tidy(lm(y~x))
 
@@ -48,6 +48,8 @@ ndvi_adjust <- function(lai_change, A, B){
   # B: slope from fig 4b
   # NDVI_diff: Change in NDVI from original NDVI (NDVI units)
   
+  NDVI_orig <- 0.5  # NDVI_diff is the same no matter the starting NDVI value 
+  
   # For linear equation (4b), find X value associated with original NDVI 
   X_orig <- (NDVI_orig-A)/B
   # Find new X value
@@ -60,6 +62,6 @@ ndvi_adjust <- function(lai_change, A, B){
 }
 
 # Example function
-# ndvi_adjust(lai_loss = 0.7, A = A, B = B)
+# ndvi_adjust(lai_change = 0.7, A = A, B = B)
 
 

@@ -5,13 +5,13 @@
 # Tibble: db_final_all
 
 source("R/0_utilities.R")
+source("R/0_establish_lai_ndvi_relation.R")
 
 # ---------------------------------------------------------------------
 # Assign NDVI change variables
-# Run 0_establish_lai_ndvi_relation.R to establish A and B
-source("R/0_establish_lai_ndvi_relation.R")
 
-lai_change <- 0.5           # New level of biomass/lai as fraction of original biomass/lai (e.g. 30% reduction in lai would be 0.7)
+# Run 0_establish_lai_ndvi_relation.R to establish A and B
+lai_change <- 0.667           # New level of biomass/lai as fraction of original biomass/lai (e.g. 30% reduction in lai would be 0.7)
 ndvi_change <- ndvi_adjust(lai_change = lai_change, A = A, B = B)
 
 # ---------------------------------------------------------------------
@@ -44,9 +44,10 @@ ndvi_tmp <- ndvi %>%
   tidyr::gather(-elevation_m, -number_cells, -year, key=period, value=ndvi) %>% 
   # Calculate ET
 # dplyr::mutate(et = 123.8243*exp(2.5456*ndvi))         # Roche2018 for Landsat
-# dplyr::mutate(et_vpsat = 3.7129*exp(3.0748*ndvi))     # Bales2018 for MODIS
+# dplyr::mutate(et = 3.7129*exp(3.0748*ndvi)*satVPweighted)     # Bales2018 for MODIS
+  dplyr::mutate(et = 3.7129*exp(3.0748*ndvi)*23.52738)     # Bales2018 for MODIS (satvp value from average satvp value on 'ET regression' tab)
 # dplyr::mutate(et = 10.3247*exp(2.8599*ndvi))           # Goulden2014 for MODIS
-  dplyr::mutate(et = 101.49*exp(2.6853*ndvi))           # Goulden2012 for MODIS
+# dplyr::mutate(et = 101.49*exp(2.6853*ndvi))           # Goulden2012 for MODIS
 
 
 
@@ -110,5 +111,6 @@ db_final_all <- db_tmp %>%
 
 write_csv(db_final_year, "output/output_1/db_final_year.csv")
 write_csv(db_final_all, "output/output_1/db_final_all.csv")
+
 
 
