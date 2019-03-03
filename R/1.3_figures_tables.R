@@ -83,7 +83,12 @@ plot(x)
 ggsave("water_fluxes_all.pdf", plot = x, device = "pdf", path = "output/output_1", width = 7, height = 4)
 
 
-
+# Largest difference for a given bin
+db_final_all %>% 
+  dplyr::select(elevation_m, et) %>% 
+  dplyr::group_by(elevation_m) %>% 
+  dplyr::summarise(et_diff = -diff(et)) %>% 
+  dplyr::summarise(et_max = max(et_diff))
 
 # ---------------------------------------------------------------------
 # Plot Area weighted P_minus_ET
@@ -109,12 +114,12 @@ plot(x)
 ggsave("area_weighted_fluxes2.pdf", plot = x, device = "pdf", path = "output/output_1", width = 7, height = 4)
 
 
-# Plot p_minus_et as percent of current
+# Plot p_minus_et as percent of historical
 x <- db_final_all %>% 
   dplyr::select(elevation_m, number_cells, period, p_minus_et_total_all_year, area_fraction) %>% 
   tidyr::spread(period, p_minus_et_total_all_year) %>% 
-  dplyr::mutate(current_percent = (current/sum(current))*100,              # current as a percent of current
-                historical_percent = (historical/sum(current))*100) %>%    # historical as a percent of current
+  dplyr::mutate(current_percent = (current/sum(historical))*100,              # current as a percent of historical
+                historical_percent = (historical/sum(historical))*100) %>%    # historical as a percent of historical
   tidyr::gather(current_percent, historical_percent,
                 key = 'period', value = p_minus_et_percent) %>% 
   ggplot(.) +
@@ -163,8 +168,6 @@ summary_all <- db_final_all %>%
   dplyr::summarise(precip = mean(precip_total_all_year/mean(number_cells)),
                    et = mean(et_total_all_year/mean(number_cells)),
                    p_minus_et = mean(p_minus_et_total_all_year/mean(number_cells)))
-
-
 
 
 # ---------------------------------------------------------------------

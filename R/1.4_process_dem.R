@@ -41,13 +41,13 @@ db_final_all <- read_csv("output/output_1/db_final_all.csv")
 et_diff <- db_final_all %>% 
   dplyr::select(c(elevation_m, et, period)) %>% 
   tidyr::spread(period, et) %>% 
-  dplyr::mutate(et_diff = historical - current)
+  dplyr::mutate(et_diff = current - historical)
 
 # Generate difference in P_minus_ET
 p_minus_et_diff <- db_final_all %>% 
   dplyr::select(c(elevation_m, p_minus_et, period)) %>% 
   tidyr::spread(period, p_minus_et) %>% 
-  dplyr::mutate(p_minus_et_diff = historical - current)
+  dplyr::mutate(p_minus_et_diff = current - historical)
 
 # Join differences
 flux_bins <- dplyr::full_join(et_diff, p_minus_et_diff, by = c("elevation_m"))
@@ -63,7 +63,7 @@ flux_bins <- dplyr::full_join(et_diff, p_minus_et_diff, by = c("elevation_m"))
 # flux_bins <- dplyr::bind_rows(flux_bins_extra_low, flux_bins, flux_bins_extra_high)
 flux_bins_extra_high <- flux_bins[1,]
 flux_bins_extra_high$elevation_m <- c(4350)
-flux_bins_extra_high$p_minus_et_diff <- c(24)
+flux_bins_extra_high$p_minus_et_diff <- c(-24)
 flux_bins <- dplyr::bind_rows(flux_bins, flux_bins_extra_high)
 
 # ---------------------------------------------------------------------
@@ -90,10 +90,11 @@ flux_delta <- r1 %>%
 x <- ggplot() +
   geom_raster(data=flux_delta,aes(x=x,y=y, fill=layer)) +
   geom_sf(data=kings_border, fill=NA, col="black") +
-  scale_fill_continuous(low="red", high="blue", name="Reduction in\nET (mm)") +
+  scale_fill_continuous(low="red", high="blue", name="Reduction in\nP-ET (mm)") +
   #scale_x_continuous(expand=c(0,0)) +   # This eliminates margin buffer around plot
   #scale_y_continuous(expand=c(0,0)) +   # This eliminates margin buffer around plot
-  labs(title=paste("Reduction in Historical ET Relative to Modern-Day ET"), x="Longitude",y="Latitude", size=0.5) +
+  #labs(title=paste("Reduction in Modern-Day P-ET Relative to Historical P-ET"), x="Longitude",y="Latitude", size=0.5) +
+  labs(x="Longitude",y="Latitude", size=0.5) +
   theme_classic(base_size =14) +
   theme (panel.grid.major = element_line(size = 0.5, linetype = 'solid', colour = "grey"))  +
   NULL
