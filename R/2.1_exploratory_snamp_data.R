@@ -88,12 +88,22 @@ ggsave("ndvi_cc_model_log.pdf", plot = x, device = "pdf", path = "output/output_
 # Power
 x <- ggplot(snamp_data) +
   geom_point(aes(x=CC_pre, y=NDVI_Pre)) +
+  labs(x = "Canopy Cover (%)", y = "NDVI") +
+  stat_function(fun=curve4,args=list(a=a4, b=b4), size=1.2) +
+  NULL
+plot(x)
+ggsave("ndvi_cc_model_power.pdf", plot = x, device = "pdf", path = "output/output_1", width = 7, height = 4)
+
+
+# Power (logged axes)
+x <- ggplot(snamp_data) +
+  geom_point(aes(x=CC_pre, y=NDVI_Pre)) +
   scale_x_continuous(trans='log') +
   scale_y_continuous(trans='log') +
   stat_function(fun=curve4,args=list(a=a4, b=b4), size=1.2) +
   NULL
 plot(x)
-ggsave("ndvi_cc_model_power.pdf", plot = x, device = "pdf", path = "output/output_1", width = 7, height = 4)
+ggsave("ndvi_cc_model_power_logged.pdf", plot = x, device = "pdf", path = "output/output_1", width = 7, height = 4)
 
 
 # ---------------------------------------------------------------------

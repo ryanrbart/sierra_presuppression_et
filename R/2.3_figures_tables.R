@@ -88,7 +88,8 @@ db_final_all %>%
   dplyr::select(elevation_m, et) %>% 
   dplyr::group_by(elevation_m) %>% 
   dplyr::summarise(et_diff = -diff(et)) %>% 
-  dplyr::summarise(et_max = max(et_diff))
+  dplyr::filter(et_diff == max(et_diff))
+
 
 # ---------------------------------------------------------------------
 # Plot Area weighted P_minus_ET
@@ -114,12 +115,12 @@ plot(x)
 ggsave("area_weighted_fluxes2.pdf", plot = x, device = "pdf", path = "output/output_1", width = 7, height = 4)
 
 
-# Plot p_minus_et as percent of historical
+# Plot p_minus_et as percent of current
 x <- db_final_all %>% 
   dplyr::select(elevation_m, number_cells, period, p_minus_et_total_all_year, area_fraction) %>% 
   tidyr::spread(period, p_minus_et_total_all_year) %>% 
-  dplyr::mutate(current_percent = (current/sum(historical))*100,              # current as a percent of historical
-                historical_percent = (historical/sum(historical))*100) %>%    # historical as a percent of historical
+  dplyr::mutate(current_percent = (current/sum(current))*100,              # current as a percent of current
+                historical_percent = (historical/sum(current))*100) %>%    # historical as a percent of current
   tidyr::gather(current_percent, historical_percent,
                 key = 'period', value = p_minus_et_percent) %>% 
   ggplot(.) +
@@ -185,8 +186,19 @@ q_annual %>%
   dplyr::summarise(mean_flow = mean(flow_mm))
 
 
+# ---------------------------------------------------------------------
+# Convert changes in P-ET from mm to acre-feet
 
+mm_to_af = function(mm, km2){
+  # mm * km2 * 1m/1000mm * 1000000m2/1km2 * 1af/1233.48184m3
+  af <- mm*km2*0.810713192
+  return(af)
+}
 
+mm_diff <- summary_all[2,4]-summary_all[1,4]
+p_et_ac <- mm_to_af(mm_diff, 3998)
+
+print(p_et_ac)
 
 
 
