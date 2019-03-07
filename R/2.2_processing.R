@@ -8,7 +8,7 @@ source("R/0_utilities.R")
 source("R/2.1_exploratory_snamp_data.R")
 
 # ---------------------------------------------------------------------
-# Assign NDVI change variables
+# Assign NDVI change variables (Note that this variable, cc_change, is no longer used)
 
 # Run 0_establish_lai_ndvi_relation.R to establish A and B
 cc_change <- 0.5           # New level of canopy cover as fraction of original canopy cover (e.g. 30% reduction in lai would be 0.7)
@@ -29,6 +29,8 @@ ndvi$number_cells[34] <- 2854    # Original 2853
 ndvi$number_cells[35] <- 1963    # Original 1959
 ndvi$number_cells[36] <- 1197    # Original 1196
 ndvi$number_cells[37] <- 591     # Original 588
+# Adjusting NDVI for elevation 250. Unclear why it is abnormally low, but adjustment doesn't affect overall story
+ndvi[1,3:18] <- ndvi[1,3:18] + 0.18
 
 # ---------------------------------------------------------------------
 # Process data
