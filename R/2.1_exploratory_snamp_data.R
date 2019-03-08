@@ -90,6 +90,7 @@ x <- ggplot(snamp_data) +
   geom_point(aes(x=CC_pre, y=NDVI_Pre)) +
   labs(x = "Canopy Cover (%)", y = "NDVI") +
   stat_function(fun=curve4,args=list(a=a4, b=b4), size=1.2) +
+  theme_bw(base_size = 12) +
   NULL
 plot(x)
 ggsave("ndvi_cc_model_power.pdf", plot = x, device = "pdf", path = "output/output_1", width = 7, height = 4)

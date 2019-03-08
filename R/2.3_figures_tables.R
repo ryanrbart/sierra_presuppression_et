@@ -171,6 +171,13 @@ summary_all <- db_final_all %>%
                    p_minus_et = mean(p_minus_et_total_all_year/mean(number_cells)))
 print(summary_all)
 
+print(paste("ET increase:", round(summary_all$et[1] - summary_all$et[2],3)))
+print(paste("ET increase %:", round(summary_all$et[1] / summary_all$et[2] - 1,3)))
+
+print(paste("p_minus_et decrease:", round(summary_all$p_minus_et[1] - summary_all$p_minus_et[2],3)))
+print(paste("p_minus_et decrease %:", round(summary_all$p_minus_et[1] / summary_all$p_minus_et[2] - 1,3)))
+
+
 # ---------------------------------------------------------------------
 # Calculate mean full natural flow
 
